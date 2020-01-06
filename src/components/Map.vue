@@ -86,7 +86,9 @@
 </template>
 
 <script>
-//import Mapbox from "mapbox-gl";
+import Mapbox from "mapbox-gl";
+import * as THREE from 'three';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
 import { MglMap, MglMarker, MglPopup } from "vue-mapbox";
 import { genGet } from '../request'
 //import { timeConverter } from '../utils'
@@ -141,6 +143,7 @@ export default {
 
   created() {
 
+    this.mapbox = Mapbox;
     this.map = null
 
     this.retrieveDataSets((datasets)=>{
@@ -155,6 +158,7 @@ export default {
       // in component
       this.map = event.map;
       this.building3D()
+      //this.addModel()
       //this.$store.map = event.map;
 
     },
@@ -268,6 +272,7 @@ export default {
       this.view3D = !this.view3D
     },
 
+    // Experimental function adding a 3D model into the map
     building3D() {
 
       // Insert the layer beneath any symbol layer.
@@ -316,9 +321,108 @@ export default {
         },
         this.buildingLayerID
       )
-    
+    },
 
+    addModel(){
+
+      // parameters to ensure the model is georeferenced correctly on the map
+      var modelOrigin = [-1.2532284, 51.7484376];
+      var modelAltitude = 3;
+      var modelRotate = [Math.PI / 2, 0, 0];
       
+      var modelAsMercatorCoordinate = this.mapbox.MercatorCoordinate.fromLngLat(
+        modelOrigin,
+        modelAltitude
+      );
+      
+      // transformation parameters to position, rotate and scale the 3D model onto the map
+      var modelTransform = {
+        translateX: modelAsMercatorCoordinate.x,
+        translateY: modelAsMercatorCoordinate.y,
+        translateZ: modelAsMercatorCoordinate.z,
+        rotateX: modelRotate[0],
+        rotateY: modelRotate[1],
+        rotateZ: modelRotate[2],
+        scale: modelAsMercatorCoordinate.meterInMercatorCoordinateUnits()
+      }
+
+      var customLayer = {
+        id: '3d-model',
+        type: 'custom',
+        renderingMode: '3d',
+
+        onAdd: function(map, gl) {
+          
+          this.camera = new THREE.Camera();
+          this.scene = new THREE.Scene();
+          
+          // create two three.js lights to illuminate the model
+          var directionalLight = new THREE.DirectionalLight(0xffffff);
+          directionalLight.position.set(0, -70, 100).normalize();
+          this.scene.add(directionalLight);
+          
+          var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+          directionalLight2.position.set(0, 70, 100).normalize();
+          this.scene.add(directionalLight2);
+          
+          // use the three.js FBX loader to add the 3D model to the three.js scene
+          var loader = new FBXLoader();
+            loader.load(
+              './assets/models/plane.fbx',
+              function(obj) {
+                this.scene.add(obj);
+              }.bind(this)
+            );
+          
+          // use the Mapbox GL JS map canvas for three.js
+          this.renderer = new THREE.WebGLRenderer({
+            canvas: map.getCanvas(),
+            context: gl,
+            antialias: true
+          });
+          
+          this.renderer.autoClear = false;
+        },
+        render: function(gl, matrix) {
+          var rotationX = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(1, 0, 0),
+            modelTransform.rotateX
+          );
+          var rotationY = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(0, 1, 0),
+            modelTransform.rotateY
+          );
+          var rotationZ = new THREE.Matrix4().makeRotationAxis(
+            new THREE.Vector3(0, 0, 1),
+            modelTransform.rotateZ
+          );
+        
+          var m = new THREE.Matrix4().fromArray(matrix);
+          var l = new THREE.Matrix4()
+
+          .makeTranslation(
+            modelTransform.translateX,
+            modelTransform.translateY,
+            modelTransform.translateZ
+          )
+          .scale(
+            new THREE.Vector3(
+              modelTransform.scale,
+              -modelTransform.scale,
+              modelTransform.scale
+            )
+          )
+          .multiply(rotationX)
+          .multiply(rotationY)
+          .multiply(rotationZ);
+          
+          this.camera.projectionMatrix = m.multiply(l);
+          this.renderer.state.reset();
+          this.renderer.render(this.scene, this.camera);
+          //this.map.triggerRepaint();
+        }
+      }
+      this.map.addLayer(customLayer, 'waterway-label');
     },
 
     // Not working and cannot be async
