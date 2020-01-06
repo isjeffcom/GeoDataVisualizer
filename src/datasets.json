@@ -7,25 +7,33 @@
             "parms":[
                 {
                 "name": "lamin",
-                "val": "49.458362"
+                "val": 49.458362
                 },
                 {
                 "name": "lamax",
-                "val": "59.831400"
+                "val": 59.831400
                 },
                 {
                 "name": "lomin",
-                "val": "-11.14"
+                "val": -11.14
                 },
                 {
                 "name": "lomax",
-                "val": "1.58"
+                "val": 1.58
                 }
             ],
             "dataHead": "states",
-            "every": "30"
+            "keepUpdate": true,
+            "every": 30
         },
         "type":"3D",
+        "useMarker": true,
+        "markerType": "img",
+        "markerSrc": "../assets/plane.svg",
+        "markerSize": 20,
+        "hasDirection": true,
+        "easePosiUpdate": true,
+        "fakeMovingAni": false,
         "structType": "Array",
         "struct": {
             "0":{
@@ -33,7 +41,7 @@
                 "type": "String",
                 "isArray": false,
                 "isObject": false,
-                "displayName": "ICAO Address",
+                "displayName": "ICAO",
                 "assignName": "icao24",
                 "front": "",
                 "end":""
