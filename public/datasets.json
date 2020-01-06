@@ -1,0 +1,236 @@
+[
+    {
+        "enable": true,
+        "id": "rta",
+        "displayName": "Real-Time Airplane Tracking",
+        "description": "Real-Time Airplane on the UK airspace",
+        "config": {
+            "mode": "live",
+            "hasDirection": true,
+            "easePosiUpdate": true,
+            "fakeMovingAni": false
+        },
+        "source":{
+            "type": "restful", 
+            "api": "https://opensky-network.org/api/states/all",
+            "parms":[
+                {
+                "name": "lamin",
+                "val": 49.458362
+                },
+                {
+                "name": "lamax",
+                "val": 59.831400
+                },
+                {
+                "name": "lomin",
+                "val": -11.14
+                },
+                {
+                "name": "lomax",
+                "val": 1.58
+                }
+            ],
+            "dataHead": "states",
+            "keepUpdate": true,
+            "every": 3
+        },
+        "marker": {
+            "enable": true,
+            "type": 2,
+            "file": "img",
+            "src": "./assets/img/plane.svg",
+            "size": 20,
+            "rotate": true,
+            "rotateSrc": 10
+        },
+        "popup": {
+            "enable": true,
+            "display": [ 0, 1, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 ]
+        },
+        "wording": {
+            "replace": [
+                { "from": "true", "to": "Yes" },
+                { "from": "false", "to": "No" }
+            ]
+        },
+        "struct": {
+            "type": "Array",
+            "data":{
+                "0":{
+                    "enable": true,
+                    "type": "String",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "ICAO",
+                    "name": "icao24",
+                    "front": "",
+                    "end":""
+                },
+                "1":{
+                    "enable": true,
+                    "type": "String",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Call Sign",
+                    "name": "callsign",
+                    "front": "",
+                    "end":""
+                },
+                "2":{
+                    "enable": false,
+                    "type": "String",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Origin Country",
+                    "name": "origin_country",
+                    "front": "",
+                    "end":""
+                },
+                "3": {
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Position Update",
+                    "name": "time_position",
+                    "front": "",
+                    "end":""
+                },
+                "4": {
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Last Contact",
+                    "name": "last_contact",
+                    "front": "",
+                    "end":""
+                },
+                "5": {
+                    "enable": true,
+                    "type": "Geo_WGS-84_Longitude",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Longitude",
+                    "name": "longitude",
+                    "front": "",
+                    "end":""
+                },
+                "6": {
+                    "enable": true,
+                    "type": "Geo_WGS-84_Latitude",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Latitude",
+                    "name": "latitude",
+                    "front": "",
+                    "end":""
+                },
+                "7": {
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Baro Altitude",
+                    "name": "baro_altitude",
+                    "front": "",
+                    "end":""
+                },
+                "8": {
+                    "enable": true,
+                    "type": "Boolean",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "On Ground",
+                    "name": "on_ground",
+                    "front": "",
+                    "end":""
+                },
+                "9":{
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Air Speed",
+                    "name": "velocity",
+                    "front": "",
+                    "end":"m/s"
+                },
+                "10":{
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Direction",
+                    "name": "true_track",
+                    "front": "",
+                    "end":"°"
+                },
+                "11": {
+                    "enable": true,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Vertical Rate",
+                    "name": "vertical_rate",
+                    "front": "",
+                    "end":""
+                },
+                "12": {
+                    "enable": false,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Sensors",
+                    "name": "sensors",
+                    "front": "",
+                    "end":""
+                },
+                "13": {
+                    "enable": true,
+                    "type": "Geo_WGS-84_Altitude",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Geometric Altitude",
+                    "name": "geo_altitude",
+                    "front": "",
+                    "end":""
+                },
+                "14": {
+                    "enable": true,
+                    "type": "String",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Transponder Code",
+                    "name": "squawk",
+                    "front": "",
+                    "end":""
+                },
+                "15": {
+                    "enable": false,
+                    "type": "Boolean",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Special Purpose",
+                    "name": "spi",
+                    "front": "",
+                    "end":""
+                },
+                "16": {
+                    "enable": false,
+                    "type": "Number",
+                    "isArray": false,
+                    "isObject": false,
+                    "displayName": "Position Source",
+                    "name": "position_source",
+                    "front": "",
+                    "end":""
+                }
+            }
+        }
+
+        
+
+    }
+]
