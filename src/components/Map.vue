@@ -64,13 +64,8 @@
         </div>
       
       </div>
-      
-
-      
 
     </MglMap>
-
-    
 
 
     <div id="panel">
@@ -89,11 +84,13 @@
 import Mapbox from "mapbox-gl";
 import * as THREE from 'three';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js'
-import { MglMap, MglMarker, MglPopup } from "vue-mapbox";
+import { MglMap, MglMarker, MglPopup } from "vue-mapbox"
 import { genGet } from '../request'
 //import { timeConverter } from '../utils'
 
 import { CONF } from "../Conf"
+
+import { Tween } from "@createjs/tweenjs";
 
 export default {
   components: {
@@ -156,11 +153,8 @@ export default {
     onMapLoaded(event) {
 
       // in component
-      this.map = event.map;
+      this.map = event.map
       this.building3D()
-      //this.addModel()
-      //this.$store.map = event.map;
-
     },
 
     // Retrieve Datasets Config
@@ -215,7 +209,7 @@ export default {
       });
     },
 
-    // Retrieve Live Data Feed
+    // Retrieve from Live Data Feed
     retrieveData(config, index) {
 
       /*config = {
@@ -244,7 +238,8 @@ export default {
             }
             
             if(this.currentData[index]){
-              this.$set(this.currentData,index, res)
+              //this.updatePosition(this.currentData, index, res, "coor", true)
+              this.$set(this.currentData, index, res)
             } else {
               this.currentData.push(res)
             }
@@ -258,6 +253,29 @@ export default {
         })
 
         this.isLoading = false
+      }
+    },
+
+    updatePosition (data_stored, data_index, newData, positionTarget, isEase) {
+      if(isEase){
+        /*var posi = data_stored[data_index][0]
+        var ani = Tween.get(posi[positionTarget])
+                    .to([newData[0][positionTarget][0], newData[0][positionTarget][1]], 400)
+                    .call(() => {
+                      console.log("finished")
+                    })*/
+
+        data_stored[data_index].forEach(posi => {
+          var ani = Tween.get(posi[positionTarget])
+                    //.to({x: newData[0][positionTarget][0], y: newData[0][positionTarget][1]})
+                    .to([newData[0][positionTarget][0], newData[0][positionTarget][1]], 400)
+                    .call(() => {
+                      //this.$set(this.currentData, index, res)
+                      console.log("finished")
+                    })
+          
+        });
+        //console.log(data_stored[data_index])
       }
     },
 

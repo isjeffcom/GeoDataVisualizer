@@ -1,7 +1,8 @@
 [
     {
         "enable": true,
-        "id": "rta",
+        "id": 0,
+        "name": "rta",
         "displayName": "Real-Time Airplane Tracking",
         "description": "Real-Time Airplane on the UK airspace",
         "config": {
